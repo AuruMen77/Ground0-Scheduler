@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.fc-daygrid-day.fc-daygrid-event {
+    background-color: #e3f2fd; /* Light mint green */
+    border-color: #8bc3f6; /* Lighter mint green border */
+    color: #333; /* Dark text */
+  }
