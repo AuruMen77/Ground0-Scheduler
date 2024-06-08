@@ -1,13 +1,13 @@
 import Pagination from "@/Components/Pagination";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
+import {ACTIVITY_TYPE} from "@/Config/activity-status";
 
 export default function Index({ auth, activities }) {
-    
-    const formatDate = (date) =>{
-        return new Date(date.substring(4,6) + ", " + date.substring(0,2) + ", " + date.substring(7))
-                };
-    
+   
+    const getActivityTypeInfo = (type) => {
+        return ACTIVITY_TYPE.find((t)=> t.value === type)
+      }
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -26,6 +26,7 @@ export default function Index({ auth, activities }) {
                                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                                     <tr className="text-nowrap">
                                         <th className="px-3 py-2">ID</th>
+                                        <th className="px-3 py-2">Type</th>
                                         <th className="px-3 py-2">Title</th>
 
                                         <th className="px-3 py-2">Start - Date</th>
@@ -40,11 +41,13 @@ export default function Index({ auth, activities }) {
                                     {activities.data.map((activity) => (
                                         <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                                             <td className="font-bold px-3 py-2">{activity.id}</td>
+                                            <td className="px-3 py-2">{getActivityTypeInfo(activity.type).label}</td>
+
                                             <td className="px-3 py-2">{activity.title}</td>
-                                            <td className="px-3 py-2">{formatDate(activity.start_time).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
-                                            <td className="px-3 py-2">{formatDate(activity.start_time).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric' })}</td>
-                                            <td className="px-3 py-2">{formatDate(activity.end_time).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric' })}</td>
-                                            <td className="px-3 py-2">{formatDate(activity.end_time).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+                                            <td className="px-3 py-2">{new Date(activity.start_time).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+                                            <td className="px-3 py-2">{new Date(activity.start_time).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric' })}</td>
+                                            <td className="px-3 py-2">{new Date(activity.end_time).toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric' })}</td>
+                                            <td className="px-3 py-2">{new Date(activity.end_time).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
                                             <td className="px-3 py-2">{activity.cost}</td>
                                         </tr>
                                     ))}

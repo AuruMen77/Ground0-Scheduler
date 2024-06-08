@@ -1,27 +1,34 @@
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import TextInput from "@/Components/TextInput";
+import SelectInput from "@/Components/SelectInput"
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from '@inertiajs/react';
+import { useState } from "react";
+import {ACTIVITY_TYPE} from "@/Config/activity-status";
 
 export default function CreateActivity({ auth }) {
     const { data, setData, post, errors } = useForm({
         title: '',
         start_date: '',
         start_time: '',
-        end_date: '',
         end_time: '',
         cost: '',
     });
 
+    const [loading, setLoading] = useState(false);
 
     const onSubmit = (e) => {
         e.preventDefault();
 
+        setLoading(true);
+
         post(route("activity.store"), {
             onSuccess: () => {
-                // Reset form data upon successful submission
+
+              
                 setData({
+                    type: '',
                     title: '',
                     start_date: '',
                     start_time: '',
@@ -29,8 +36,10 @@ export default function CreateActivity({ auth }) {
                     end_time: '',
                     cost: '',
                 });
+                setLoading(false);
             },
         });
+        setLoading(false);
 
     };
 
@@ -47,6 +56,27 @@ export default function CreateActivity({ auth }) {
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <form onSubmit={onSubmit} className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
+
+                            <div>
+                                <InputLabel htmlFor="type" value="Activity type" />
+                                <SelectInput
+                                    id="type"
+                                    type="select"
+                                    name="title"
+                                    value={data.type}
+                                    className="mt-1 block w-full"
+                                    onChange={e => setData('type', e.target.value)}
+                                    isFocused={true}
+                                >
+                                    <option value=""></option>
+                                    {ACTIVITY_TYPE.map((actType)=>{
+                                          return <option value={actType.value}>{actType.label}</option>
+                                    })}
+                                    
+                                </SelectInput>
+                                {errors.title && <InputError message={errors.title} className="mt-2" />}
+                            </div>
+
                             <div>
                                 <InputLabel htmlFor="title" value="Activity Title" />
                                 <TextInput
@@ -56,10 +86,11 @@ export default function CreateActivity({ auth }) {
                                     value={data.title}
                                     className="mt-1 block w-full"
                                     onChange={e => setData('title', e.target.value)}
-                                    isFocused={true}
+
                                 />
                                 {errors.title && <InputError message={errors.title} className="mt-2" />}
                             </div>
+
                             <div className="mt-4 flex flex-row w-full gap-10">
                                 <div>
                                     <InputLabel htmlFor="start_date" value="Start Date" />
@@ -73,6 +104,7 @@ export default function CreateActivity({ auth }) {
                                     />
                                     {errors.start_date && <InputError message={errors.start_date} className="mt-2" />}
                                 </div>
+
                                 <div>
                                     <InputLabel htmlFor="start_time" value="Start Time" />
                                     <TextInput
@@ -84,20 +116,6 @@ export default function CreateActivity({ auth }) {
                                         onChange={e => setData('start_time', e.target.value)}
                                     />
                                     {errors.start_time && <InputError message={errors.start_time} className="mt-2" />}
-                                </div>
-                            </div>
-                            <div className="mt-4 flex flex-row w-full gap-10">
-                                <div>
-                                    <InputLabel htmlFor="end_date" value="End Date" />
-                                    <TextInput
-                                        id="end_date"
-                                        type="date"
-                                        name="end_date"
-                                        value={data.end_date}
-                                        className="mt-1"
-                                        onChange={e => setData('end_date', e.target.value)}
-                                    />
-                                    <InputError message={errors.end_date} className="mt-2" />
                                 </div>
                                 <div>
                                     <InputLabel htmlFor="end_time" value="End Time" />
@@ -112,6 +130,7 @@ export default function CreateActivity({ auth }) {
                                     <InputError message={errors.end_time} className="mt-2" />
                                 </div>
                             </div>
+                           
                             <div className="mt-4">
                                 <InputLabel htmlFor="cost" value="Cost ($)" />
                                 <TextInput
@@ -124,6 +143,7 @@ export default function CreateActivity({ auth }) {
                                 />
                                 <InputError message={errors.cost} className="mt-2" />
                             </div>
+
                             <div className="flex mt-10 gap-10">
                                 <Link
                                     href={route('dashboard')}

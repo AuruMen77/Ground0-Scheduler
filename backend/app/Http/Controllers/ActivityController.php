@@ -7,12 +7,25 @@ use App\Http\Requests\StoreActivityRequest;
 use App\Http\Requests\UpdateActivityRequest;
 use App\Http\Resources\ActivityResource;
 
+
+
+
 class ActivityController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
 
+    const ACTIVITY_TYPE = [
+        ['label' => 'Daily Activity', 'value' => 'dailyActivity'],
+        ['label' => 'Outdoor Event', 'value' => 'outdoorEvent'],
+        ['label' => 'Tolerance Time', 'value' => 'toleranceTime'],
+        ['label' => 'Recoup from Unplanned Activities', 'value' => 'recoup'],
+        ['label' => 'Backup', 'value' => 'backup'],
+        ['label' => 'Meeting with Kuya Walts', 'value' => 'meetingWithWatts'],
+        ['label' => 'Meeting with Team', 'value' => 'meetingWithTeam'],
+    ];
+    
     public function index()
     {
 
@@ -43,10 +56,11 @@ class ActivityController extends Controller
         $startDate = new \DateTime($data['start_date']);
         $startTime = new \DateTime($data['start_time']);
         $data['start_time'] = $startDate->format('Y-m-d') . 'T' . $startTime->format('H:i:00');
-
-        $endDate = new \DateTime($data['end_date']);
+        
         $endTime = new \DateTime($data['end_time']);
-        $data['end_time'] = $endDate->format('Y-m-d') . 'T' . $endTime->format('H:i:00');
+        $data['end_time'] = $startDate->format('Y-m-d') . 'T' . $endTime->format('H:i:00');
+
+        $data['title'] = trim($data['title']) === "" ? self::getActivityTypeInfo($data['type']) : $data['title'];
 
         // Optional: Remove unnecessary fields
         unset($data['start_date'], $data['end_date']);
@@ -87,5 +101,15 @@ class ActivityController extends Controller
     public function destroy(Activity $activity)
     {
         //
+    }
+
+    private static function getActivityTypeInfo($type)
+    {
+        foreach (self::ACTIVITY_TYPE as $activity) {
+            if ($activity['value'] === $type) {
+                return $activity['label'];
+            }
+        }
+        return ''; // Return empty string if type is not found
     }
 }

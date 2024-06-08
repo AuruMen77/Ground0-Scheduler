@@ -1,0 +1,9 @@
+  export const ACTIVITY_TYPE = [
+        {label: "Daily Activity", value:"dailyActivity"},
+        {label: "Outdoor Event", value:"outdoorEvent"},
+        {label: "Tolerance Time", value:"toleranceTime"},
+        {label: "Recoup from Unplanned Activities", value:"recoup"},
+        {label: "Backup", value:"backup"},
+        {label: "Meeting with Kuya Walts", value:"meetingWithWatts"},
+        {label: "Meeting with Team", value:"meetingWithTeam"},
+    ]

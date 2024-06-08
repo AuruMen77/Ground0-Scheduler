@@ -17,10 +17,12 @@ class ActivityResource extends JsonResource
     public function toArray(Request $request): array
     {
        return[
+        
         'id' => $this->id,
+        'type' => $this->type,
         'title' => $this->title,
-        'start_time' => (new Carbon($this->start_time))->format('d/m/Y H:i'),
-        'end_time' => (new Carbon($this->end_time))->format('d/m/Y H:i'),
+        'start_time' => (new Carbon($this->start_time))->format('Y/m/d H:i'),
+        'end_time' => (new Carbon($this->end_time))->format('Y/m/d H:i'),
         'cost' => $this->cost,
        ];
     }

@@ -22,10 +22,10 @@ class StoreActivityRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "title"=>['required', 'max:255'],
+            "type"=>['required'],
+            "title"=>['max:255'],
             "start_date"=>['required' ],
             "start_time"=>['required'],
-            "end_date"=>['required'],
             "end_time"=>['required'],
             "cost"=>['required']
         ];
